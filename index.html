@@ -81,7 +81,7 @@
   <div id="adminModal">
     <div class="modal-content">
       <h3 style="color:#fff;">Yangi Skript Qo'shish (Admin)</h3>
-      <input type="password" id="adminPass" placeholder="Admin Paroli (Standart: 1234)">
+      <input type="password" id="adminPass" placeholder="Admin Pinkodini kiriting">
       <input type="text" id="scriptTitle" placeholder="Skript Nomi (masalan: Redz Hub)">
       <input type="text" id="scriptGame" placeholder="O'yin Nomi (masalan: Blox Fruits)">
       <textarea id="scriptCode" rows="3" placeholder="loadstring(game:HttpGet(...))()"></textarea>
@@ -96,7 +96,7 @@
   <div id="toast">✅ Skript nusxalandi!</div>
 
   <script>
-    // SIZNING RASMIY FIREBASE BAZANGIZ SOZLAMALARI:
+    // SIZNING FIREBASE SOZLAMALARINGIZ:
     const firebaseConfig = {
       apiKey: "AIzaSyAQ28AjxdgJI7jQ4zrfW0R17J-rlbM6fCk",
       authDomain: "animuhauzscript.firebaseapp.com",
@@ -107,13 +107,12 @@
       measurementId: "G-61G1WJ8EWZ"
     };
 
-    // Firebase'ni ishga tushirish
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     let allScripts = [];
 
-    // BAZADAN SKRIPTLARNI REAL-TIME HAMMA UCHUN OLISH
+    // BAZADAN REAL-TIME OLISH
     db.collection("scripts").onSnapshot(snapshot => {
       allScripts = [];
       snapshot.forEach(doc => {
@@ -175,9 +174,9 @@
       const game = document.getElementById("scriptGame").value.trim();
       const code = document.getElementById("scriptCode").value.trim();
 
-      // Admin Paroli: 1234 (Xohlasangiz o'zgartirishingiz mumkin)
-      if (pass !== "1234") {
-        alert("❌ Noto'g'ri admin paroli!");
+      // SIZNING MAXSUS PINKODINGIZ: 21345577
+      if (pass !== "21345577") {
+        alert("❌ Noto'g'ri admin pinkodi!");
         return;
       }
       if (!title || !game || !code) {
@@ -193,6 +192,7 @@
       }).then(() => {
         alert("✅ Skript Google Firebase bazasiga qo'shildi! Endi hamma foydalanuvchilarga ko'rindi!");
         closeAdmin();
+        document.getElementById("adminPass").value = "";
         document.getElementById("scriptTitle").value = "";
         document.getElementById("scriptGame").value = "";
         document.getElementById("scriptCode").value = "";
@@ -202,4 +202,4 @@
     }
   </script>
 </body>
-    </html>
+</html>
