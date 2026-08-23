@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animuhauzscript Hub - Roblox Skriptlar Portali</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131b2e;
+      --card-border: #1e293b;
+      --accent: #e11d48;
+      --accent-hover: #be123c;
+      --accent-glow: rgba(225, 29, 72, 0.3);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --badge-keyless: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 20px 15px 60px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .logo-badge {
+      display: inline-block;
+      background: rgba(225, 29, 72, 0.15);
+      color: #fb7185;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      border: 1px solid rgba(225, 29, 72, 0.3);
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff 40%, #fb7185 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    p.sub {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* SEARCH & FILTER */
+    .controls {
+      margin-bottom: 20px;
+    }
+    .search-box {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: 0.2s;
+    }
+    .search-box:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .category-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 0 4px;
+      scrollbar-width: none;
+    }
+    .category-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .cat-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.2s;
+    }
+    .cat-btn.active, .cat-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* CARDS */
+    .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      border-color: rgba(225, 29, 72, 0.4);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .title-area h3 {
+      font-size: 18px;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .game-name {
+      font-size: 12px;
+      color: #38bdf8;
+      font-weight: bold;
+    }
+    .badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--badge-keyless);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .badge.key {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .desc {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    /* CODE BOX */
+    .code-box {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #34d399;
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+
+    /* COPY BUTTON */
+    .copy-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+    .copy-btn:active {
+      transform: scale(0.98);
+      background: var(--accent-hover);
+    }
+
+    /* TOAST NOTIFICATION */
+    #toast {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #10b981;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+      transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="logo-badge">🔥 100% BEPUL VA TEKSHIRILGAN</div>
+      <h1>Animuhauzscript Hub</h1>
+      <p class="sub">Delta va boshqa executorlar uchun eng yangi Roblox skriptlari</p>
+    </header>
+
+    <div class="controls">
+      <input type="text" id="searchInput" class="search-box" placeholder="🔍 O'yin yoki skript nomini qidiring (masalan: Blox Fruits)..." oninput="filterScripts()">
+      <div class="category-scroll" id="categoryContainer"></div>
+    </div>
+
+    <div class="grid" id="scriptsContainer"></div>
+  </div>
+
+  <div id="toast">✅ Skript nusxalandi! Executoringizga qo'ying.</div>
+
+  <script>
+    // BARCHA SKRIPTLAR MA'LUMOTLAR BAZASI
+    const SCRIPTS = [
+      {
+        title: "Redz Hub",
+        game: "Blox Fruits",
+        category: "bloxfruits",
+        desc: "Level ko'tarish (1-2550), mevalarni avtomatik topish va dengiz hodisalarini avtomatlashtirish uchun eng yaxshi script.",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/refs/heads/main/Source.lua"))()`,
+        isKeyless: true
+      },
+      {
+        title: "W-Azure Hub",
+        game: "Blox Fruits",
+        category: "bloxfruits",
+        desc: "Mirage Island, V4 Race uyg'otish va PvP Auto Bounty uchun eng kuchli script.",
+        code: `loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc6104d4a3e1e70eaecd93.lua"))()`,
+        isKeyless: false
+      },
+      {
+        title: "FFJ1 Hub (Auto Parry)",
+        game: "Blade Ball",
+        category: "bladeball",
+        desc: "To'pni avtomatik va kechikishsiz qaytarish (Ultra Fast Auto Parry) va Manual Curve.",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJ1/Roblox-Exploits/main/scripts/BladeBall.lua"))()`,
+        isKeyless: true
+      },
+      {
+        title: "Speed Hub X",
+        game: "Fisch",
+        category: "fisch",
+        desc: "Baliqlarni 100% ushlash (Auto Reel, Instant Catch), Auto Sell va noyob joylarga teleport.",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"))()`,
+        isKeyless: true
+      },
+      {
+        title: "Sander X VIP",
+        game: "Brookhaven RP",
+        category: "brookhaven",
+        desc: "Barcha mashinalarni ochish, uylarni portlatish, o'yinchilarni muzlatish va uchish (Fly).",
+        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/sXPloit/Sander-X/main/Loader.lua'))()`,
+        isKeyless: true
+      },
+      {
+        title: "ZapHub",
+        game: "Pet Simulator 99",
+        category: "petsim",
+        desc: "Tanga va brilliantlarni cheksiz avtofarma qilish va noyob Huge petlarni avtomatik ochish.",
+        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/script-development/zap-hub/main/main.lua'))()`,
+        isKeyless: true
+      },
+      {
+        title: "Tora Hub (Aimbot & ESP)",
+        game: "Rivals / Arsenal",
+        category: "rivals",
+        desc: "Dushmanlarni devor ortidan ko'rish (ESP) va to'g'ridan-to'g'ri boshiga urish (Silent Aim).",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/toraisme/torascript/main/rivals"))()`,
+        isKeyless: true
+      },
+      {
+        title: "Eclipse Hub",
+        game: "Murder Mystery 2",
+        category: "mm2",
+        desc: "Qotil va Sheriffni aniqlash, tushgan qurolni bir zumda olish va tangalarni yig'ish.",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Ethanoj1/EclipseMM2/master/Script"))()`,
+        isKeyless: true
+      },
+      {
+        title: "Chiyo Hub",
+        game: "King Legacy",
+        category: "kinglegacy",
+        desc: "King Legacyda eng tezkor daraja oshirish (1-4400) va afsonaviy qilichlarni avto olish.",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/ChiyoRBLX/ChiyoHub/main/KingLegacy.lua"))()`,
+        isKeyless: true
+      },
+      {
+        title: "Infinite Yield (Admin Commands)",
+        game: "Barcha O'yinlar (Universal)",
+        category: "universal",
+        desc: "400+ buyruqlar: fly (uchish), noclip (devordan o'tish), speed, esp, btools, fling.",
+        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()`,
+        isKeyless: true
+      },
+      {
+        title: "Mobile Fly GUI V3",
+        game: "Barcha O'yinlar (Universal)",
+        category: "universal",
+        desc: "Telefon va planshetlar uchun joystik orqali uchish boshqaruvi bo'lgan qulay menyu.",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()`,
+        isKeyless: true
+      },
+      {
+        title: "Dark Dex V3 Explorer",
+        game: "Barcha O'yinlar (Universal)",
+        category: "universal",
+        desc: "O'yin ichidagi barcha modellar, xaritalar va yashirin narsalarni ko'rish va tahlil qilish.",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/BypassedDarkDexV3.lua"))()`,
+        isKeyless: true
+      }
+    ];
+
+    const CATEGORIES = [
+      { id: "all", name: "Barchasi" },
+      { id: "bloxfruits", name: "Blox Fruits" },
+      { id: "bladeball", name: "Blade Ball" },
+      { id: "fisch", name: "Fisch" },
+      { id: "brookhaven", name: "Brookhaven" },
+      { id: "petsim", name: "Pet Sim 99" },
+      { id: "rivals", name: "Rivals / Arsenal" },
+      { id: "mm2", name: "MM2" },
+      { id: "kinglegacy", name: "King Legacy" },
+      { id: "universal", name: "Universal" }
+    ];
+
+    let currentCategory = "all";
+
+    // KATEGORIYALARNI CHIQARISH
+    function renderCategories() {
+      const container = document.getElementById("categoryContainer");
+      container.innerHTML = CATEGORIES.map(cat => `
+        <button class="cat-btn ${cat.id === currentCategory ? 'active' : ''}" onclick="selectCategory('${cat.id}')">
+          ${cat.name}
+        </button>
+      `).join("");
+    }
+
+    function selectCategory(catId) {
+      currentCategory = catId;
+      renderCategories();
+      filterScripts();
+    }
+
+    // SKRIPTLARNI CHIQARISH
+    function renderScripts(items) {
+      const container = document.getElementById("scriptsContainer");
+      if (items.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:#94a3b8; padding:30px;">Hech qanday skript topilmadi 😕</p>`;
+        return;
+      }
+
+      container.innerHTML = items.map((s, index) => `
+        <div class="card">
+          <div class="card-top">
+            <div class="title-area">
+              <h3>${s.title}</h3>
+              <span class="game-name">🎮 ${s.game}</span>
+            </div>
+            <span class="badge ${s.isKeyless ? '' : 'key'}">
+              ${s.isKeyless ? '✓ Kalitsiz (Keyless)' : '🔑 Kalitli'}
+            </span>
+          </div>
+
+          <p class="desc">${s.desc}</p>
+          <div class="code-box">${s.code}</div>
+
+          <button class="copy-btn" onclick="copyScript(${index})">
+            📋 Skriptni Nusxalash
+          </button>
+        </div>
+      `).join("");
+    }
+
+    // QIDIRUV VA FILTER
+    function filterScripts() {
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = SCRIPTS.filter(s => {
+        const matchCategory = currentCategory === "all" || s.category === currentCategory;
+        const matchSearch = s.title.toLowerCase().includes(search) || 
+                            s.game.toLowerCase().includes(search) || 
+                            s.desc.toLowerCase().includes(search);
+        return matchCategory && matchSearch;
+      });
+      renderScripts(filtered);
+    }
+
+    // NUSXALASH JAVASCRIPT FUNKSIYASI
+    function copyScript(index) {
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const currentList = SCRIPTS.filter(s => {
+        const matchCategory = currentCategory === "all" || s.category === currentCategory;
+        const matchSearch = s.title.toLowerCase().includes(search) || 
+                            s.game.toLowerCase().includes(search) || 
+                            s.desc.toLowerCase().includes(search);
+        return matchCategory && matchSearch;
+      });
+
+      const scriptText = currentList[index].code;
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(scriptText).then(showToast);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = scriptText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        showToast();
+      }
+    }
+
+    function showToast() {
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2500);
+    }
+
+    // SAHIFA YUKLANGANDA ISHGA TUSHIRISH
+    renderCategories();
+    renderScripts(SCRIPTS);
+  </script>
+</body>
+</html>
