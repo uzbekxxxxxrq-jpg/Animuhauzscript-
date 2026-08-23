@@ -3,6 +3,322 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delta Script Hub</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: #0a0a0a; color: #f5f5f5; padding: 16px; min-height: 100vh; }
+    
+    /* Header */
+    .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid #262626; margin-bottom: 16px; }
+    .logo-box { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg, #9333ea, #4f46e5); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; color: #fff; }
+    .logo-title { font-size: 16px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+    .logo-sub { font-size: 11px; color: #a3a3a3; }
+
+    /* Tugmalar */
+    .btn-add { background: linear-gradient(135deg, #9333ea, #4f46e5); color: #fff; border: 1px solid rgba(168, 85, 247, 0.4); padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .btn-add:hover { opacity: 0.9; transform: scale(0.98); }
+    
+    /* Banner */
+    .banner { background: linear-gradient(135deg, rgba(88, 28, 135, 0.4), #171717); border: 1px solid #3b0764; border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+    .banner h2 { font-size: 18px; font-weight: 800; margin-bottom: 6px; color: #fff; }
+    .banner p { font-size: 12px; color: #d4d4d4; line-height: 1.4; }
+
+    /* Qidiruv */
+    .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
+    .search-input { flex: 1; background: #171717; border: 1px solid #333; border-radius: 10px; padding: 10px 14px; color: #fff; font-size: 13px; outline: none; }
+    .search-input:focus { border-color: #a855f7; }
+
+    /* Skriptlar Setkasi */
+    .scripts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .script-card { background: #141414; border: 1px solid #262626; border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; flex-direction: column; gap: 12px; }
+    .card-top { display: flex; justify-content: space-between; align-items: center; }
+    .game-badge { font-size: 10px; font-weight: 700; color: #c084fc; text-transform: uppercase; }
+    .key-badge { font-size: 9px; padding: 2px 6px; border-radius: 6px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .script-title { font-size: 14px; font-weight: 700; color: #fff; margin-top: 4px; }
+    
+    .code-box { background: #0a0a0a; border: 1px solid #262626; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 10px; color: #e9d5ff; word-break: break-all; max-height: 48px; overflow: hidden; }
+    .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .tag { font-size: 9px; background: #262626; color: #a3a3a3; padding: 2px 6px; border-radius: 4px; }
+
+    .btn-copy { width: 100%; background: #9333ea; color: #fff; border: none; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .btn-copy:hover { background: #7e22ce; }
+    .btn-copy.copied { background: #16a34a; }
+
+    /* Modallar */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+    .modal-box { background: #171717; border: 1px solid #333; border-radius: 18px; padding: 20px; width: 100%; max-width: 360px; text-align: center; }
+    .modal-box h3 { font-size: 16px; margin-bottom: 6px; color: #fff; }
+    .modal-box p { font-size: 12px; color: #a3a3a3; margin-bottom: 14px; }
+    
+    .input-field { width: 100%; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; padding: 10px; color: #fff; font-size: 13px; margin-bottom: 10px; outline: none; box-sizing: border-box; }
+    .input-field:focus { border-color: #a855f7; }
+    .pin-input { font-size: 18px; text-align: center; letter-spacing: 4px; font-family: monospace; }
+    
+    .modal-actions { display: flex; gap: 8px; margin-top: 6px; }
+    .btn-cancel { flex: 1; background: #262626; color: #d4d4d4; border: none; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .btn-submit { flex: 1; background: #9333ea; color: #fff; border: none; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .error-msg { color: #f87171; font-size: 11px; margin-top: -6px; margin-bottom: 8px; display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-box">
+      <div class="logo-icon">Δ</div>
+      <div>
+        <div class="logo-title">DELTA SCRIPT HUB</div>
+        <div class="logo-sub">Roblox Delta Scriptlari</div>
+      </div>
+    </div>
+    <button class="btn-add" onclick="showPinModal()">+ Script Qo'shish</button>
+  </div>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <h2>Delta Executor Scriptlar To'plami</h2>
+    <p>+1 Cut Grass Adventure, Connect the Words, Blox Fruits va barcha o'yinlar uchun yangi skriptlar.</p>
+  </div>
+
+  <!-- QIDIRUV -->
+  <div class="search-box">
+    <input type="text" id="searchInput" class="search-input" onkeyup="renderScripts()" placeholder="Script yoki o'yin nomini qidiring...">
+  </div>
+
+  <!-- SKRIPTLAR RO'YXATI -->
+  <div id="scriptsGrid" class="scripts-grid"></div>
+
+  <!-- 1. PIN KOD MODALI -->
+  <div id="pinModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Xavfsizlik PIN-Kodi</h3>
+      <p>Yangi script qo'shish uchun maxsus PIN-kodni kiriting</p>
+      
+      <input type="password" id="pinInput" class="input-field pin-input" maxlength="12" placeholder="••••••••">
+      <div id="pinError" class="error-msg">PIN-kod noto'g'ri!</div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closePinModal()">Bekor qilish</button>
+        <button class="btn-submit" onclick="checkPin()">Kirish</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. SCRIPT QO'SHISH FORMASI -->
+  <div id="addModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 420px; text-align: left;">
+      <h3 style="text-align: center; margin-bottom: 12px;">Yangi Script Qo'shish</h3>
+      
+      <label style="font-size: 11px; color: #a3a3a3; display: block; margin-bottom: 4px;">Script Nomi *</label>
+      <input type="text" id="newTitle" class="input-field" placeholder="Masalan: Cut Grass Auto Farm">
+
+      <label style="font-size: 11px; color: #a3a3a3; display: block; margin-bottom: 4px;">O'yin Nomi *</label>
+      <input type="text" id="newGame" class="input-field" placeholder="+1 Cut Grass Adventure">
+
+      <label style="font-size: 11px; color: #a3a3a3; display: block; margin-bottom: 4px;">Delta Loadstring Kodi *</label>
+      <textarea id="newCode" class="input-field" style="height: 70px; resize: none; font-family: monospace;" placeholder='loadstring(...)()'></textarea>
+
+      <label style="font-size: 11px; color: #a3a3a3; display: block; margin-bottom: 4px;">Funksiyalari (vergul bilan)</label>
+      <input type="text" id="newFeatures" class="input-field" placeholder="Auto Cut, Speed 65, Auto Swing">
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeAddModal()">Bekor qilish</button>
+        <button class="btn-submit" onclick="saveScript()">Saqlash</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var ADMIN_PIN = "21345577";
+
+    // Asosiy Umumiy Skriptlar Bazasi (Hamma uchun bir zumda ko'rinadi)
+    var defaultScripts = [
+      {
+        id: "grass_farm_1",
+        title: "Grass Auto Farm (+1 Cut Grass)",
+        game: "+1 Cut Grass Adventure",
+        code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()',
+        tags: ["Auto Cut", "Speed 65", "Touch Drop Collect", "Keyless"]
+      },
+      {
+        id: "animuhauz_1",
+        title: "Animuhauzscript",
+        game: "Connect the Words",
+        code: 'loadstring(game:HttpGet("https://pastebin.com/raw/Bqb84ZRd"))()',
+        tags: ["Connect the Words", "Auto Script", "Delta Safe"]
+      },
+      {
+        id: "bf1",
+        title: "Redz Hub (Blox Fruits)",
+        game: "Blox Fruits",
+        code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/refs/heads/main/Source.lua"))()',
+        tags: ["Auto Farm", "Fruit Sniper", "Sea Events", "CDK"]
+      },
+      {
+        id: "bb1",
+        title: "FFJ1 Hub (Blade Ball)",
+        game: "Blade Ball",
+        code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJ1/Roblox-Exploits/main/scripts/BladeBall.lua"))()',
+        tags: ["Auto Parry", "Curve Ball", "Spam", "Ball ESP"]
+      },
+      {
+        id: "fs1",
+        title: "Speed Hub X (Fisch)",
+        game: "Fisch",
+        code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"))()',
+        tags: ["Auto Fish", "Perfect Shake", "Auto Sell", "Teleport"]
+      },
+      {
+        id: "iy1",
+        title: "Infinite Yield (Universal)",
+        game: "Barcha O'yinlar",
+        code: "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()",
+        tags: [";fly", ";noclip", ";speed 100", ";esp"]
+      }
+    ];
+
+    function getAllScripts() {
+      try {
+        var local = localStorage.getItem("my_delta_scripts");
+        if (local) {
+          return JSON.parse(local);
+        }
+      } catch (e) {}
+      return defaultScripts;
+    }
+
+    function renderScripts() {
+      var grid = document.getElementById("scriptsGrid");
+      var q = document.getElementById("searchInput").value.toLowerCase();
+      var list = getAllScripts();
+
+      var filtered = list.filter(function(item) {
+        return item.title.toLowerCase().indexOf(q) !== -1 || item.game.toLowerCase().indexOf(q) !== -1;
+      });
+
+      var html = "";
+      for (var i = 0; i < filtered.length; i++) {
+        var s = filtered[i];
+        var tagsHtml = "";
+        if (s.tags) {
+          for (var t = 0; t < s.tags.length; t++) {
+            tagsHtml += '<span class="tag">' + s.tags[t] + '</span>';
+          }
+        }
+
+        html += '<div class="script-card">' +
+                  '<div>' +
+                    '<div class="card-top">' +
+                      '<span class="game-badge">' + s.game + '</span>' +
+                      '<span class="key-badge">Keyless</span>' +
+                    '</div>' +
+                    '<div class="script-title">' + s.title + '</div>' +
+                    '<div class="code-box" style="margin: 8px 0;">' + s.code + '</div>' +
+                    '<div class="tags">' + tagsHtml + '</div>' +
+                  '</div>' +
+                  '<button class="btn-copy" id="btn_' + s.id + '" onclick="copyScriptCode(\'' + s.id + '\', ' + JSON.stringify(s.code) + ')">Nusxalash</button>' +
+                '</div>';
+      }
+      grid.innerHTML = html;
+    }
+
+    function copyScriptCode(id, code) {
+      var textarea = document.createElement("textarea");
+      textarea.value = code;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+      } catch (err) {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(code);
+        }
+      }
+      document.body.removeChild(textarea);
+
+      var btn = document.getElementById("btn_" + id);
+      if (btn) {
+        var oldText = btn.innerText;
+        btn.innerText = "✓ Nusxalandi!";
+        btn.className = "btn-copy copied";
+        setTimeout(function() {
+          btn.innerText = oldText;
+          btn.className = "btn-copy";
+        }, 2000);
+      }
+    }
+
+    function showPinModal() {
+      document.getElementById("pinInput").value = "";
+      document.getElementById("pinError").style.display = "none";
+      document.getElementById("pinModal").style.display = "flex";
+    }
+
+    function closePinModal() {
+      document.getElementById("pinModal").style.display = "none";
+    }
+
+    function checkPin() {
+      var input = document.getElementById("pinInput").value.trim();
+      if (input === ADMIN_PIN) {
+        closePinModal();
+        showAddModal();
+      } else {
+        document.getElementById("pinError").style.display = "block";
+      }
+    }
+
+    function showAddModal() {
+      document.getElementById("newTitle").value = "";
+      document.getElementById("newGame").value = "";
+      document.getElementById("newCode").value = "";
+      document.getElementById("newFeatures").value = "";
+      document.getElementById("addModal").style.display = "flex";
+    }
+
+    function closeAddModal() {
+      document.getElementById("addModal").style.display = "none";
+    }
+
+    function saveScript() {
+      var title = document.getElementById("newTitle").value.trim();
+      var game = document.getElementById("newGame").value.trim();
+      var code = document.getElementById("newCode").value.trim();
+      var feats = document.getElementById("newFeatures").value.trim();
+
+      if (!title || !code) {
+        alert("Iltimos, Script nomi va kodi kiritilsin!");
+        return;
+      }
+
+      var newObj = {
+        id: "custom_" + new Date().getTime(),
+        title: title,
+        game: game || "Universal",
+        code: code,
+        tags: feats ? feats.split(",") : ["Maxsus Script"]
+      };
+
+      var list = getAllScripts();
+      list.unshift(newObj);
+
+      try {
+        localStorage.setItem("my_delta_scripts", JSON.stringify(list));
+      } catch (e) {}
+
+      closeAddModal();
+      renderScripts();
+    }
+
+    renderScripts();
+  </script>
+</body>
+  </html><!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Animuhauzscript Hub - Roblox Skriptlar Portali</title>
   <style>
     :root {
