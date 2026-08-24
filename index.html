@@ -43,8 +43,6 @@
     .modal-content input, .modal-content textarea { width: 100%; padding: 11px 12px; background: #090d16; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
     .modal-actions { display: flex; gap: 10px; margin-top: 5px; }
     .save-btn { flex: 1; background: var(--accent); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-    .seed-btn { background: #0284c7; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 4px; }
-    .seed-btn:hover { background: #0369a1; }
     .close-btn { background: #334155; color: #fff; border: none; padding: 12px 15px; border-radius: 8px; cursor: pointer; }
 
     /* SCRIPT CARDS */
@@ -53,9 +51,10 @@
     .card:hover { border-color: rgba(225, 29, 72, 0.4); }
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
     .title-area h3 { font-size: 17px; color: #fff; margin-bottom: 2px; }
-    .game { color: #38bdf8; font-size: 12px; font-weight: bold; }
+    .game { color: #38bdf8; font-size: 13px; font-weight: bold; }
     .card-badges { display: flex; gap: 6px; align-items: center; }
     .badge { background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; }
+    .badge-cloud { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
     .code-box { background: #090d16; border: 1px solid #1e293b; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 12px; color: #34d399; overflow-x: auto; white-space: nowrap; }
     
     .card-actions { display: flex; gap: 8px; }
@@ -67,54 +66,133 @@
 
     #toast { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(100px); background: #10b981; color: #fff; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 14px; transition: 0.3s; z-index: 9999; box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
     #toast.show { transform: translateX(-50%) translateY(0); }
-    .loading { text-align: center; color: var(--text-muted); padding: 40px 0; }
   </style>
 </head>
 <body>
 
   <div class="container">
     <header>
-      <div class="logo-badge">⚡ BULUTLI ONLAYN BAZA</div>
+      <div class="logo-badge">🔥 RASMIY ROBLOX SKRIPTLAR HUBI</div>
       <h1>Animuhauzscript Hub</h1>
-      <p class="sub">Hamma uchun onlayn yangilanib turadigan eng yangi Roblox skriptlari</p>
+      <p class="sub">Barcha o'yinlar uchun eng yangi va kalitsiz (Keyless) skriptlar</p>
     </header>
 
     <div class="top-actions">
-      <input type="text" id="searchInput" class="search-box" placeholder="🔍 Skript yoki o'yin qidirish..." oninput="filterScripts()">
-      <button class="admin-btn" onclick="openAdmin()">⚙️ Boshqaruv / Qo'shish</button>
+      <input type="text" id="searchInput" class="search-box" placeholder="🔍 Skript yoki o'yin nomini qidiring..." oninput="filterScripts()">
+      <button class="admin-btn" onclick="openAdmin()">+ Skript qo'shish</button>
     </div>
 
-    <div id="loading" class="loading">Yuklanmoqda...</div>
     <div class="grid" id="scriptsContainer"></div>
   </div>
 
   <!-- ADMIN & MANAGEMENT MODAL -->
   <div id="adminModal">
     <div class="modal-content">
-      <h3 style="color:#fff;">Admin Boshqaruv Paneli</h3>
-      <input type="password" id="adminPass" placeholder="Admin Pinkodini kiriting (21345577)">
-      
-      <p style="font-size:12px; color:#94a3b8; margin-top:5px;">Yangi bitta skript qo'shish:</p>
-      <input type="text" id="scriptTitle" placeholder="Skript Nomi (masalan: Redz Hub)">
+      <h3 style="color:#fff;">Yangi Skript Qo'shish</h3>
+      <input type="password" id="adminPass" placeholder="Admin Pinkodini kiriting">
+      <input type="text" id="scriptTitle" placeholder="Skript Nomi (masalan: Zenith Hub)">
       <input type="text" id="scriptGame" placeholder="O'yin Nomi (masalan: Blox Fruits)">
-      <textarea id="scriptCode" rows="2" placeholder="loadstring(game:HttpGet(...))()"></textarea>
+      <textarea id="scriptCode" rows="3" placeholder="loadstring(game:HttpGet(...))()"></textarea>
       
       <div class="modal-actions">
         <button class="close-btn" onclick="closeAdmin()">Yopish</button>
-        <button class="save-btn" onclick="saveNewScript()">Bazaga Qo'shish 🚀</button>
+        <button class="save-btn" onclick="saveNewScript()">Bazaga Saqlash 🚀</button>
       </div>
-
-      <hr style="border: 0; border-top: 1px solid #334155; margin: 8px 0;">
-      
-      <button class="seed-btn" onclick="seedDefaultScripts()">⚡ 12 ta Tayyor Skriptlarni Bazaga Yuklash</button>
-      <small style="color:#64748b; font-size:11px; text-align:center;">(Blox Fruits, Blade Ball, Fisch, Brookhaven, MM2, Rivals va boshqalarni bir zumda bazaga qo'shadi)</small>
     </div>
   </div>
 
   <div id="toast">✅ Xabar</div>
 
   <script>
-    // SIZNING FIREBASE BAZANGIZ:
+    // 1. KODNING ICHIGA O'RNATILGAN TAYYOR 14 TA ENG SARA SKRIPTLAR
+    const BUILTIN_SCRIPTS = [
+      {
+        id: "built_1",
+        title: "Animuhauzscript",
+        game: "Connect the Words",
+        code: `loadstring(game:HttpGet("https://pastebin.com/raw/Bqb84ZRd"))()`
+      },
+      {
+        id: "built_2",
+        title: "Redz Hub Auto Farm",
+        game: "Blox Fruits",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/refs/heads/main/Source.lua"))()`
+      },
+      {
+        id: "built_3",
+        title: "Hoho Hub V4 (Keyless)",
+        game: "Blox Fruits",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_HUB/main/Loading_UI"))()`
+      },
+      {
+        id: "built_4",
+        title: "W-Azure Hub Mobile",
+        game: "Blox Fruits",
+        code: `loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc6104d4a3e1e70eaecd93.lua"))()`
+      },
+      {
+        id: "built_5",
+        title: "FFJ1 Auto Parry Ultra",
+        game: "Blade Ball",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJ1/Roblox-Exploits/main/scripts/BladeBall.lua"))()`
+      },
+      {
+        id: "built_6",
+        title: "Speed Hub X (Instant Fish)",
+        game: "Fisch",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"))()`
+      },
+      {
+        id: "built_7",
+        title: "Sander X VIP Menu",
+        game: "Brookhaven RP",
+        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/sXPloit/Sander-X/main/Loader.lua'))()`
+      },
+      {
+        id: "built_8",
+        title: "ZapHub Auto Farm Diamonds",
+        game: "Pet Simulator 99",
+        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/script-development/zap-hub/main/main.lua'))()`
+      },
+      {
+        id: "built_9",
+        title: "Tora Hub Silent Aim & ESP",
+        game: "Rivals",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/toraisme/torascript/main/rivals"))()`
+      },
+      {
+        id: "built_10",
+        title: "Eclipse Hub ESP & Coin Auto",
+        game: "Murder Mystery 2",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Ethanoj1/EclipseMM2/master/Script"))()`
+      },
+      {
+        id: "built_11",
+        title: "Chiyo Hub Max Level",
+        game: "King Legacy",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/ChiyoRBLX/ChiyoHub/main/KingLegacy.lua"))()`
+      },
+      {
+        id: "built_12",
+        title: "Infinite Yield (400+ Buyruqlar)",
+        game: "Barcha O'yinlar (Universal)",
+        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()`
+      },
+      {
+        id: "built_13",
+        title: "Mobile Fly Joystick V3",
+        game: "Barcha O'yinlar (Universal)",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()`
+      },
+      {
+        id: "built_14",
+        title: "Dark Dex V3 Explorer",
+        game: "Barcha O'yinlar (Universal)",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/BypassedDarkDexV3.lua"))()`
+      }
+    ];
+
+    // 2. FIREBASE SOZLAMALARI
     const firebaseConfig = {
       apiKey: "AIzaSyAQ28AjxdgJI7jQ4zrfW0R17J-rlbM6fCk",
       authDomain: "animuhauzscript.firebaseapp.com",
@@ -127,100 +205,41 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
     const ADMIN_PIN = "21345577"; // Sizning maxsus pinkodingiz
-    let allScripts = [];
 
-    // TAYYOR 12 TA ENG ZO'R SKRIPTLAR RO'YXATI
-    const READY_PRESETS = [
-      {
-        title: "Redz Hub Auto Farm",
-        game: "Blox Fruits",
-        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/refs/heads/main/Source.lua"))()`
-      },
-      {
-        title: "Hoho Hub (V4 & Sea Events)",
-        game: "Blox Fruits",
-        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_HUB/main/Loading_UI"))()`
-      },
-      {
-        title: "FFJ1 Auto Parry Ultra",
-        game: "Blade Ball",
-        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJ1/Roblox-Exploits/main/scripts/BladeBall.lua"))()`
-      },
-      {
-        title: "Speed Hub X (Instant Catch)",
-        game: "Fisch",
-        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"))()`
-      },
-      {
-        title: "Sander X VIP Menu",
-        game: "Brookhaven RP",
-        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/sXPloit/Sander-X/main/Loader.lua'))()`
-      },
-      {
-        title: "ZapHub Auto Farm",
-        game: "Pet Simulator 99",
-        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/script-development/zap-hub/main/main.lua'))()`
-      },
-      {
-        title: "Tora Hub Silent Aim & ESP",
-        game: "Rivals",
-        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/toraisme/torascript/main/rivals"))()`
-      },
-      {
-        title: "Eclipse Hub ESP & Coin",
-        game: "Murder Mystery 2",
-        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Ethanoj1/EclipseMM2/master/Script"))()`
-      },
-      {
-        title: "Chiyo Hub Max Level",
-        game: "King Legacy",
-        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/ChiyoRBLX/ChiyoHub/main/KingLegacy.lua"))()`
-      },
-      {
-        title: "Infinite Yield Admin Commands",
-        game: "Barcha O'yinlar (Universal)",
-        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()`
-      },
-      {
-        title: "Mobile Fly Joystick V3",
-        game: "Barcha O'yinlar (Universal)",
-        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()`
-      },
-      {
-        title: "Dark Dex V3 Explorer",
-        game: "Barcha O'yinlar (Universal)",
-        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/BypassedDarkDexV3.lua"))()`
-      }
-    ];
+    let cloudScripts = [];
 
-    // BAZADAN REAL-TIME HAMMA UCHUN OLISH
+    // BAZADAN QO'SHIMCHA SKRIPTLARNI REAL-TIME OLISH VA TAYYORLAR BILAN BIRLASHTIRISH
     db.collection("scripts").onSnapshot(snapshot => {
-      allScripts = [];
+      cloudScripts = [];
       snapshot.forEach(doc => {
-        allScripts.push({ id: doc.id, ...doc.data() });
+        cloudScripts.push({ id: doc.id, isCloud: true, ...doc.data() });
       });
-      document.getElementById("loading").style.display = "none";
-      renderScripts(allScripts);
-    }, error => {
-      console.error("Firebase xatosi:", error);
-      document.getElementById("loading").innerText = "Skriptlarni yuklashda xatolik yuz berdi.";
+      renderAll();
+    }, err => {
+      renderAll();
     });
 
-    // EKRANGA CHIQARISH
+    function getAllScripts() {
+      return [...cloudScripts, ...BUILTIN_SCRIPTS];
+    }
+
+    function renderAll() {
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const all = getAllScripts();
+      const filtered = all.filter(s => s.title.toLowerCase().includes(search) || s.game.toLowerCase().includes(search));
+      renderScripts(filtered);
+    }
+
     function renderScripts(items) {
       const container = document.getElementById("scriptsContainer");
       if (items.length === 0) {
-        container.innerHTML = `<div style='text-align:center; color:#94a3b8; padding:30px;'>
-          <p>Hozircha hech qanday skript yo'q.</p>
-          <p style="margin-top:8px; font-size:13px;">Yuqoridagi <b>«⚙️ Boshqaruv / Qo'shish»</b> tugmasini bosib, tayyor skriptlarni 1 ta bosishda yuklab oling!</p>
-        </div>`;
+        container.innerHTML = `<div style='text-align:center; color:#94a3b8; padding:30px;'>Hech qanday skript topilmadi.</div>`;
         return;
       }
 
       container.innerHTML = items.map(s => `
-        <div class="card" id="card-${s.id}">
+        <div class="card">
           <div class="card-top">
             <div class="title-area">
               <h3>${s.title}</h3>
@@ -228,6 +247,7 @@
             </div>
             <div class="card-badges">
               <span class="badge">✓ Keyless</span>
+              ${s.isCloud ? '<span class="badge badge-cloud">☁️ Cloud</span>' : ''}
             </div>
           </div>
 
@@ -235,20 +255,16 @@
 
           <div class="card-actions">
             <button class="copy-btn" onclick="copyScriptText('${encodeURIComponent(s.code)}')">📋 Nusxalash</button>
-            <button class="del-btn" title="Skriptni o'chirish" onclick="deleteScript('${s.id}', '${s.title.replace(/'/g, "\\'")}')">🗑️ O'chirish</button>
+            <button class="del-btn" title="O'chirish" onclick="deleteScript('${s.id}', '${s.title.replace(/'/g, "\\'")}', ${!!s.isCloud})">🗑️ O'chirish</button>
           </div>
         </div>
       `).join("");
     }
 
-    // QIDIRUV
     function filterScripts() {
-      const search = document.getElementById("searchInput").value.toLowerCase();
-      const filtered = allScripts.filter(s => s.title.toLowerCase().includes(search) || s.game.toLowerCase().includes(search));
-      renderScripts(filtered);
+      renderAll();
     }
 
-    // NUSXALASH
     function copyScriptText(encodedCode) {
       const text = decodeURIComponent(encodedCode);
       navigator.clipboard.writeText(text).then(() => {
@@ -263,26 +279,35 @@
       setTimeout(() => toast.classList.remove("show"), 2500);
     }
 
-    // PINKOD BILAN SKRIPTLARNI O'CHIRISH (DELETE)
-    function deleteScript(docId, title) {
+    // PINKOD BILAN O'CHIRISH
+    function deleteScript(id, title, isCloud) {
       const pass = prompt(`"${title}" skriptini o'chirish uchun admin pinkodini kiriting:`);
       if (!pass) return;
 
       if (pass !== ADMIN_PIN) {
-        alert("❌ Noto'g'ri pinkod! O'chirish bekor qilindi.");
+        alert("❌ Noto'g'ri pinkod!");
         return;
       }
 
-      if (confirm(`Rostdan ham "${title}" skriptini bazadan butunlay o'chirmoqchimisiz?`)) {
-        db.collection("scripts").doc(docId).delete().then(() => {
-          showToast("🗑️ Skript bazadan o'chirildi!");
-        }).catch(err => {
-          alert("Xatolik yuz berdi: " + err.message);
-        });
+      if (confirm(`Rostdan ham "${title}" skriptini o'chirmoqchimisiz?`)) {
+        if (isCloud) {
+          db.collection("scripts").doc(id).delete().then(() => {
+            showToast("🗑️ Skript bazadan o'chirildi!");
+          }).catch(err => {
+            alert("Xatolik: " + err.message);
+          });
+        } else {
+          // Kod ichidagi skriptni yashirish
+          const idx = BUILTIN_SCRIPTS.findIndex(s => s.id === id);
+          if (idx !== -1) {
+            BUILTIN_SCRIPTS.splice(idx, 1);
+            renderAll();
+            showToast("🗑️ Skript o'chirildi!");
+          }
+        }
       }
     }
 
-    // MODAL OCHISH / YOPISH
     function openAdmin() {
       document.getElementById("adminModal").style.display = "flex";
     }
@@ -290,7 +315,7 @@
       document.getElementById("adminModal").style.display = "none";
     }
 
-    // YANGI BITTA SKRIPT QO'SHISH
+    // YANGI SKRIPT QO'SHISH (PINKOD: 21345577)
     function saveNewScript() {
       const pass = document.getElementById("adminPass").value;
       const title = document.getElementById("scriptTitle").value.trim();
@@ -312,8 +337,9 @@
         code: code,
         createdAt: new Date().toISOString()
       }).then(() => {
-        showToast("✅ Skript bazaga qo'shildi!");
+        showToast("✅ Skript bazaga saqlandi va hammaga ko'rindi!");
         closeAdmin();
+        document.getElementById("adminPass").value = "";
         document.getElementById("scriptTitle").value = "";
         document.getElementById("scriptGame").value = "";
         document.getElementById("scriptCode").value = "";
@@ -322,42 +348,8 @@
       });
     }
 
-    // 12 TA TAYYOR SKRIPTNI AVTOMATIK BAZAGA YUKLASH (SEED)
-    async function seedDefaultScripts() {
-      const pass = document.getElementById("adminPass").value;
-      if (pass !== ADMIN_PIN) {
-        alert("❌ Avval tepaga to'g'ri pinkodingizni kiriting!");
-        return;
-      }
-
-      if (!confirm("Hozir barcha 12 ta eng sara tayyor skriptlar bazaga avtomatik yuklanadi. Davom etasizmi?")) {
-        return;
-      }
-
-      const seedBtn = document.querySelector(".seed-btn");
-      seedBtn.innerText = "Yuklanmoqda...";
-      seedBtn.disabled = true;
-
-      try {
-        const batch = db.batch();
-        READY_PRESETS.forEach(item => {
-          const docRef = db.collection("scripts").doc();
-          batch.set(docRef, {
-            ...item,
-            createdAt: new Date().toISOString()
-          });
-        });
-
-        await batch.commit();
-        alert("🎉 Barcha 12 ta tayyor skriptlar bazangizga muvaffaqiyatli yuklandi!");
-        closeAdmin();
-      } catch (err) {
-        alert("Yuklashda xatolik: " + err.message);
-      } finally {
-        seedBtn.innerText = "⚡ 12 ta Tayyor Skriptlarni Bazaga Yuklash";
-        seedBtn.disabled = false;
-      }
-    }
+    // Boshlang'ich yuklash
+    renderAll();
   </script>
 </body>
-  </html>
+</html>
