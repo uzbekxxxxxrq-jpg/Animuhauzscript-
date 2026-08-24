@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Animuhauzscript Hub - Online Cloud DB</title>
+  <title>Animuhauzscript Hub - Roblox Skriptlar Portali</title>
   
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -18,12 +18,14 @@
       --accent-hover: #be123c;
       --text: #f8fafc;
       --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 20px 15px 70px; min-height: 100vh; }
-    .container { max-width: 800px; margin: 0 auto; }
+    .container { max-width: 850px; margin: 0 auto; }
     
-    header { text-align: center; margin-bottom: 20px; }
+    header { text-align: center; margin-bottom: 22px; }
     .logo-badge { display: inline-block; background: rgba(225, 29, 72, 0.15); color: #fb7185; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1px solid rgba(225, 29, 72, 0.3); margin-bottom: 8px; }
     h1 { font-size: 26px; font-weight: 900; color: #fff; margin-bottom: 6px; }
     p.sub { color: var(--text-muted); font-size: 14px; }
@@ -37,24 +39,33 @@
 
     /* ADMIN MODAL */
     #adminModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 15px; }
-    .modal-content { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; width: 100%; max-width: 450px; padding: 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    .modal-content input, .modal-content textarea { width: 100%; padding: 10px 12px; background: #090d16; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+    .modal-content { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; width: 100%; max-width: 480px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .modal-content input, .modal-content textarea { width: 100%; padding: 11px 12px; background: #090d16; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
     .modal-actions { display: flex; gap: 10px; margin-top: 5px; }
-    .save-btn { flex: 1; background: var(--accent); color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-    .close-btn { background: #334155; color: #fff; border: none; padding: 11px 15px; border-radius: 8px; cursor: pointer; }
+    .save-btn { flex: 1; background: var(--accent); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    .seed-btn { background: #0284c7; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 4px; }
+    .seed-btn:hover { background: #0369a1; }
+    .close-btn { background: #334155; color: #fff; border: none; padding: 12px 15px; border-radius: 8px; cursor: pointer; }
 
     /* SCRIPT CARDS */
     .grid { display: flex; flex-direction: column; gap: 14px; }
-    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-    .card-top { display: flex; justify-content: space-between; align-items: center; }
-    .card-top h3 { font-size: 17px; color: #fff; }
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.2s; }
+    .card:hover { border-color: rgba(225, 29, 72, 0.4); }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .title-area h3 { font-size: 17px; color: #fff; margin-bottom: 2px; }
+    .game { color: #38bdf8; font-size: 12px; font-weight: bold; }
+    .card-badges { display: flex; gap: 6px; align-items: center; }
     .badge { background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; }
-    .game { color: #38bdf8; font-size: 13px; font-weight: bold; }
     .code-box { background: #090d16; border: 1px solid #1e293b; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 12px; color: #34d399; overflow-x: auto; white-space: nowrap; }
-    .copy-btn { background: var(--accent); color: #fff; border: none; padding: 11px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    
+    .card-actions { display: flex; gap: 8px; }
+    .copy-btn { flex: 1; background: var(--accent); color: #fff; border: none; padding: 11px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.2s; }
     .copy-btn:active { background: var(--accent-hover); }
+    
+    .del-btn { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .del-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 
-    #toast { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(100px); background: #10b981; color: #fff; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 14px; transition: 0.3s; z-index: 9999; }
+    #toast { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(100px); background: #10b981; color: #fff; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 14px; transition: 0.3s; z-index: 9999; box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
     #toast.show { transform: translateX(-50%) translateY(0); }
     .loading { text-align: center; color: var(--text-muted); padding: 40px 0; }
   </style>
@@ -65,38 +76,45 @@
     <header>
       <div class="logo-badge">⚡ BULUTLI ONLAYN BAZA</div>
       <h1>Animuhauzscript Hub</h1>
-      <p class="sub">Hamma uchun onlayn yangilanib turadigan Roblox skriptlari</p>
+      <p class="sub">Hamma uchun onlayn yangilanib turadigan eng yangi Roblox skriptlari</p>
     </header>
 
     <div class="top-actions">
       <input type="text" id="searchInput" class="search-box" placeholder="🔍 Skript yoki o'yin qidirish..." oninput="filterScripts()">
-      <button class="admin-btn" onclick="openAdmin()">+ Skript qo'shish</button>
+      <button class="admin-btn" onclick="openAdmin()">⚙️ Boshqaruv / Qo'shish</button>
     </div>
 
     <div id="loading" class="loading">Yuklanmoqda...</div>
     <div class="grid" id="scriptsContainer"></div>
   </div>
 
-  <!-- ADMIN MODAL -->
+  <!-- ADMIN & MANAGEMENT MODAL -->
   <div id="adminModal">
     <div class="modal-content">
-      <h3 style="color:#fff;">Yangi Skript Qo'shish (Admin)</h3>
-      <input type="password" id="adminPass" placeholder="Admin Pinkodini kiriting">
+      <h3 style="color:#fff;">Admin Boshqaruv Paneli</h3>
+      <input type="password" id="adminPass" placeholder="Admin Pinkodini kiriting (21345577)">
+      
+      <p style="font-size:12px; color:#94a3b8; margin-top:5px;">Yangi bitta skript qo'shish:</p>
       <input type="text" id="scriptTitle" placeholder="Skript Nomi (masalan: Redz Hub)">
       <input type="text" id="scriptGame" placeholder="O'yin Nomi (masalan: Blox Fruits)">
-      <textarea id="scriptCode" rows="3" placeholder="loadstring(game:HttpGet(...))()"></textarea>
+      <textarea id="scriptCode" rows="2" placeholder="loadstring(game:HttpGet(...))()"></textarea>
       
       <div class="modal-actions">
         <button class="close-btn" onclick="closeAdmin()">Yopish</button>
-        <button class="save-btn" onclick="saveNewScript()">Bazaga Saqlash 🚀</button>
+        <button class="save-btn" onclick="saveNewScript()">Bazaga Qo'shish 🚀</button>
       </div>
+
+      <hr style="border: 0; border-top: 1px solid #334155; margin: 8px 0;">
+      
+      <button class="seed-btn" onclick="seedDefaultScripts()">⚡ 12 ta Tayyor Skriptlarni Bazaga Yuklash</button>
+      <small style="color:#64748b; font-size:11px; text-align:center;">(Blox Fruits, Blade Ball, Fisch, Brookhaven, MM2, Rivals va boshqalarni bir zumda bazaga qo'shadi)</small>
     </div>
   </div>
 
-  <div id="toast">✅ Skript nusxalandi!</div>
+  <div id="toast">✅ Xabar</div>
 
   <script>
-    // SIZNING FIREBASE SOZLAMALARINGIZ:
+    // SIZNING FIREBASE BAZANGIZ:
     const firebaseConfig = {
       apiKey: "AIzaSyAQ28AjxdgJI7jQ4zrfW0R17J-rlbM6fCk",
       authDomain: "animuhauzscript.firebaseapp.com",
@@ -110,9 +128,74 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
+    const ADMIN_PIN = "21345577"; // Sizning maxsus pinkodingiz
     let allScripts = [];
 
-    // BAZADAN REAL-TIME OLISH
+    // TAYYOR 12 TA ENG ZO'R SKRIPTLAR RO'YXATI
+    const READY_PRESETS = [
+      {
+        title: "Redz Hub Auto Farm",
+        game: "Blox Fruits",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/refs/heads/main/Source.lua"))()`
+      },
+      {
+        title: "Hoho Hub (V4 & Sea Events)",
+        game: "Blox Fruits",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_HUB/main/Loading_UI"))()`
+      },
+      {
+        title: "FFJ1 Auto Parry Ultra",
+        game: "Blade Ball",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJ1/Roblox-Exploits/main/scripts/BladeBall.lua"))()`
+      },
+      {
+        title: "Speed Hub X (Instant Catch)",
+        game: "Fisch",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"))()`
+      },
+      {
+        title: "Sander X VIP Menu",
+        game: "Brookhaven RP",
+        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/sXPloit/Sander-X/main/Loader.lua'))()`
+      },
+      {
+        title: "ZapHub Auto Farm",
+        game: "Pet Simulator 99",
+        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/script-development/zap-hub/main/main.lua'))()`
+      },
+      {
+        title: "Tora Hub Silent Aim & ESP",
+        game: "Rivals",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/toraisme/torascript/main/rivals"))()`
+      },
+      {
+        title: "Eclipse Hub ESP & Coin",
+        game: "Murder Mystery 2",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Ethanoj1/EclipseMM2/master/Script"))()`
+      },
+      {
+        title: "Chiyo Hub Max Level",
+        game: "King Legacy",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/ChiyoRBLX/ChiyoHub/main/KingLegacy.lua"))()`
+      },
+      {
+        title: "Infinite Yield Admin Commands",
+        game: "Barcha O'yinlar (Universal)",
+        code: `loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()`
+      },
+      {
+        title: "Mobile Fly Joystick V3",
+        game: "Barcha O'yinlar (Universal)",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()`
+      },
+      {
+        title: "Dark Dex V3 Explorer",
+        game: "Barcha O'yinlar (Universal)",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/BypassedDarkDexV3.lua"))()`
+      }
+    ];
+
+    // BAZADAN REAL-TIME HAMMA UCHUN OLISH
     db.collection("scripts").onSnapshot(snapshot => {
       allScripts = [];
       snapshot.forEach(doc => {
@@ -125,42 +208,81 @@
       document.getElementById("loading").innerText = "Skriptlarni yuklashda xatolik yuz berdi.";
     });
 
+    // EKRANGA CHIQARISH
     function renderScripts(items) {
       const container = document.getElementById("scriptsContainer");
       if (items.length === 0) {
-        container.innerHTML = "<p style='text-align:center; color:#94a3b8;'>Hozircha hech qanday skript qo'shilmagan. Yuqoridagi «+ Skript qo'shish» tugmasi orqali birinchi skriptni qo'shing!</p>";
+        container.innerHTML = `<div style='text-align:center; color:#94a3b8; padding:30px;'>
+          <p>Hozircha hech qanday skript yo'q.</p>
+          <p style="margin-top:8px; font-size:13px;">Yuqoridagi <b>«⚙️ Boshqaruv / Qo'shish»</b> tugmasini bosib, tayyor skriptlarni 1 ta bosishda yuklab oling!</p>
+        </div>`;
         return;
       }
-      container.innerHTML = items.map((s, index) => `
-        <div class="card">
+
+      container.innerHTML = items.map(s => `
+        <div class="card" id="card-${s.id}">
           <div class="card-top">
-            <h3>${s.title}</h3>
-            <span class="badge">✓ Keyless</span>
+            <div class="title-area">
+              <h3>${s.title}</h3>
+              <div class="game">🎮 ${s.game}</div>
+            </div>
+            <div class="card-badges">
+              <span class="badge">✓ Keyless</span>
+            </div>
           </div>
-          <div class="game">🎮 ${s.game}</div>
+
           <div class="code-box">${s.code}</div>
-          <button class="copy-btn" onclick="copyScript(${index})">📋 Nusxalash</button>
+
+          <div class="card-actions">
+            <button class="copy-btn" onclick="copyScriptText('${encodeURIComponent(s.code)}')">📋 Nusxalash</button>
+            <button class="del-btn" title="Skriptni o'chirish" onclick="deleteScript('${s.id}', '${s.title.replace(/'/g, "\\'")}')">🗑️ O'chirish</button>
+          </div>
         </div>
       `).join("");
     }
 
+    // QIDIRUV
     function filterScripts() {
       const search = document.getElementById("searchInput").value.toLowerCase();
       const filtered = allScripts.filter(s => s.title.toLowerCase().includes(search) || s.game.toLowerCase().includes(search));
       renderScripts(filtered);
     }
 
-    function copyScript(index) {
-      const search = document.getElementById("searchInput").value.toLowerCase();
-      const currentList = allScripts.filter(s => s.title.toLowerCase().includes(search) || s.game.toLowerCase().includes(search));
-      navigator.clipboard.writeText(currentList[index].code).then(() => {
-        const toast = document.getElementById("toast");
-        toast.classList.add("show");
-        setTimeout(() => toast.classList.remove("show"), 2000);
+    // NUSXALASH
+    function copyScriptText(encodedCode) {
+      const text = decodeURIComponent(encodedCode);
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("✅ Skript nusxalandi! Executoringizga qo'ying.");
       });
     }
 
-    // ADMIN FUNKSIYALARI
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+
+    // PINKOD BILAN SKRIPTLARNI O'CHIRISH (DELETE)
+    function deleteScript(docId, title) {
+      const pass = prompt(`"${title}" skriptini o'chirish uchun admin pinkodini kiriting:`);
+      if (!pass) return;
+
+      if (pass !== ADMIN_PIN) {
+        alert("❌ Noto'g'ri pinkod! O'chirish bekor qilindi.");
+        return;
+      }
+
+      if (confirm(`Rostdan ham "${title}" skriptini bazadan butunlay o'chirmoqchimisiz?`)) {
+        db.collection("scripts").doc(docId).delete().then(() => {
+          showToast("🗑️ Skript bazadan o'chirildi!");
+        }).catch(err => {
+          alert("Xatolik yuz berdi: " + err.message);
+        });
+      }
+    }
+
+    // MODAL OCHISH / YOPISH
     function openAdmin() {
       document.getElementById("adminModal").style.display = "flex";
     }
@@ -168,14 +290,14 @@
       document.getElementById("adminModal").style.display = "none";
     }
 
+    // YANGI BITTA SKRIPT QO'SHISH
     function saveNewScript() {
       const pass = document.getElementById("adminPass").value;
       const title = document.getElementById("scriptTitle").value.trim();
       const game = document.getElementById("scriptGame").value.trim();
       const code = document.getElementById("scriptCode").value.trim();
 
-      // SIZNING MAXSUS PINKODINGIZ: 21345577
-      if (pass !== "21345577") {
+      if (pass !== ADMIN_PIN) {
         alert("❌ Noto'g'ri admin pinkodi!");
         return;
       }
@@ -190,16 +312,52 @@
         code: code,
         createdAt: new Date().toISOString()
       }).then(() => {
-        alert("✅ Skript Google Firebase bazasiga qo'shildi! Endi hamma foydalanuvchilarga ko'rindi!");
+        showToast("✅ Skript bazaga qo'shildi!");
         closeAdmin();
-        document.getElementById("adminPass").value = "";
         document.getElementById("scriptTitle").value = "";
         document.getElementById("scriptGame").value = "";
         document.getElementById("scriptCode").value = "";
       }).catch(err => {
-        alert("Xatolik yuz berdi: " + err.message);
+        alert("Xatolik: " + err.message);
       });
+    }
+
+    // 12 TA TAYYOR SKRIPTNI AVTOMATIK BAZAGA YUKLASH (SEED)
+    async function seedDefaultScripts() {
+      const pass = document.getElementById("adminPass").value;
+      if (pass !== ADMIN_PIN) {
+        alert("❌ Avval tepaga to'g'ri pinkodingizni kiriting!");
+        return;
+      }
+
+      if (!confirm("Hozir barcha 12 ta eng sara tayyor skriptlar bazaga avtomatik yuklanadi. Davom etasizmi?")) {
+        return;
+      }
+
+      const seedBtn = document.querySelector(".seed-btn");
+      seedBtn.innerText = "Yuklanmoqda...";
+      seedBtn.disabled = true;
+
+      try {
+        const batch = db.batch();
+        READY_PRESETS.forEach(item => {
+          const docRef = db.collection("scripts").doc();
+          batch.set(docRef, {
+            ...item,
+            createdAt: new Date().toISOString()
+          });
+        });
+
+        await batch.commit();
+        alert("🎉 Barcha 12 ta tayyor skriptlar bazangizga muvaffaqiyatli yuklandi!");
+        closeAdmin();
+      } catch (err) {
+        alert("Yuklashda xatolik: " + err.message);
+      } finally {
+        seedBtn.innerText = "⚡ 12 ta Tayyor Skriptlarni Bazaga Yuklash";
+        seedBtn.disabled = false;
+      }
     }
   </script>
 </body>
-</html>
+  </html>
